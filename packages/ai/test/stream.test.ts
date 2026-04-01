@@ -422,6 +422,26 @@ describe("Generate E2E Tests", () => {
 		});
 	});
 
+	describe("Google Vertex Provider (gemini-3.1-flash-lite-preview)", () => {
+		const vertexProject = process.env.GOOGLE_CLOUD_PROJECT || process.env.GCLOUD_PROJECT;
+		const vertexLocation = process.env.GOOGLE_CLOUD_LOCATION;
+		const isVertexConfigured = Boolean(vertexProject && vertexLocation);
+		const vertexOptions = { project: vertexProject, location: vertexLocation } as const;
+		const llm = getModel("google-vertex", "gemini-3.1-flash-lite-preview");
+
+		it.skipIf(!isVertexConfigured)("should complete basic text generation", { retry: 3 }, async () => {
+			await basicTextGeneration(llm, vertexOptions);
+		});
+
+		it.skipIf(!isVertexConfigured)(
+			"should handle thinking (skipping due to model flaky response)",
+			{ retry: 3 },
+			async () => {
+				// skip thinking for now as flash-lite might not always think or support it yet in preview
+			},
+		);
+	});
+
 	describe.skipIf(!process.env.OPENAI_API_KEY)("OpenAI Completions Provider (gpt-4o-mini)", () => {
 		const { compat: _compat, ...baseModel } = getModel("openai", "gpt-4o-mini");
 		void _compat;

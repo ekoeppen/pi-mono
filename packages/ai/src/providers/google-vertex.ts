@@ -464,7 +464,7 @@ function isGemini3ProModel(model: Model<"google-generative-ai">): boolean {
 }
 
 function isGemini3FlashModel(model: Model<"google-generative-ai">): boolean {
-	return /gemini-3(?:\.\d+)?-flash/.test(model.id.toLowerCase());
+	return /gemini-3(?:\.\d+)?-flash(?:-lite)?/.test(model.id.toLowerCase());
 }
 
 function getDisabledThinkingConfig(model: Model<"google-vertex">): ThinkingConfig {
